@@ -62,22 +62,27 @@ body {
 }
 
 .telecom-buttons {
-  position: relative;
-  margin-top: 50px;
+  margin-top: auto;
+  /* 남은 공간을 밀어내어 하단에 배치 */
   width: 100%;
-  height: 440px;
-  /* 고정 높이로 버튼 간의 겹침(클러스터) 비율 유지 */
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* 하단부터 위로 정렬 옵션이나, flex-direction: column-reverse도 방법입니다. 겹침을 방지하려면 gap 사용 */
+  align-items: center;
+  gap: 16px;
+  /* 공 사이의 간격 설정 (겹침 방지) */
+  flex: 1;
+  /* 가용한 전체 높이를 차지하도록 하여 하단으로 확실하게 보냄 */
+  padding-bottom: 20px;
+  /* 너무 바닥에 붙지 않게 여유 공간 */
 }
 
 .circle-wrap {
-  position: absolute;
-  width: 190px;
-  height: 190px;
+  width: 170px;
+  /* 모바일에 3개가 들어가도록 크기 약간 축소 */
+  height: 170px;
   transform-origin: center bottom;
-  /* 바닥 충돌 시 찌그러짐을 위해 */
   /* 애니메이션 전에는 보이지 않도록 딜레이 중의 초기 상태(0%)를 유지시키는 both 속성 사용 */
   animation: bounceDrop 1.2s both;
 }
@@ -100,32 +105,27 @@ body {
   transform: scale(0.92);
 }
 
-/* 위치와 Z-index, 등장 지연시간 조절 */
-/* 차곡차곡 쌓이도록 SKT (아래) -> KT (중간) -> LG U+ (위) 순서로 딜레이 및 인덱스 부여 */
+/* 위치 및 등장 지연시간 제어 (절대위치 제거) */
+/* Flex 컨테이너 안이므로 top/left 같은 absolute positioning 제거 */
 .skt-wrap {
-  top: 250px;
-  left: 10px;
   z-index: 1;
-  /* 가장 아래층 */
   animation-delay: 0s;
+  order: 3;
+  /* CSS Order를 통해 화면 상 가장 아래(마지막)에 위치하도록 조정 */
 }
 
 .kt-wrap {
-  top: 130px;
-  right: -10px;
   z-index: 2;
-  /* 두 번째 층 */
   animation-delay: 0.3s;
-  /* SKT 드롭 후 0.3초 딜레이 */
+  order: 2;
+  /* 화면 상 중간에 위치 */
 }
 
 .lgu-wrap {
-  top: 0;
-  left: 0;
   z-index: 3;
-  /* 가장 윗층 */
   animation-delay: 0.6s;
-  /* KT 드롭 후 0.3초 딜레이 */
+  order: 1;
+  /* 화면 상 가장 위(처음)에 위치 */
 }
 
 
