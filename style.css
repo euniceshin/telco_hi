@@ -10,10 +10,9 @@ body {
   background-color: #222224;
   color: #ffffff;
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
-  min-height: 100vh;
+  height: 100dvh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -21,7 +20,7 @@ body {
 .app-container {
   width: 100%;
   max-width: 480px;
-  flex-grow: 1;
+  height: 100dvh;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -63,18 +62,16 @@ body {
 }
 
 .telecom-buttons {
-  margin-top: 10px;
-  /* 약간 여유공간 */
+  margin-top: auto;
+  /* 상단 텍스트 밑의 모든 공간을 밀어내어 상자를 화면 맨 아랫바닥으로 보냄 */
   width: 100%;
+  height: 450px;
+  /* 바닥부터 공 3개가 넉넉히 들어갈 수 있는 고정 높이 확보 */
   position: relative;
-  /* 자식 absolute 기준점 */
-  flex-grow: 1;
-  /* 남은 하단 공간을 꽉 채우기 */
-  max-width: 320px;
+  /* 내부 공들의 절대 위치(bottom/left/right) 기준점 제공 */
   margin-left: auto;
   margin-right: auto;
-  display: flex;
-  flex-direction: column;
+  max-width: 320px;
 }
 
 .circle-wrap {
@@ -109,22 +106,22 @@ body {
   서로 겹치도록 z-index와 딜레이, bottom/left/right 좌표 설정 
 */
 .skt-wrap {
-  bottom: 20px;
-  left: -10%;
+  bottom: -20px;
+  left: 5%;
   z-index: 1;
   animation-delay: 0s;
 }
 
 .kt-wrap {
-  bottom: 150px;
-  right: -10%;
+  bottom: 120px;
+  right: 5%;
   z-index: 2;
   animation-delay: 0.3s;
 }
 
 .lgu-wrap {
-  bottom: 280px;
-  left: 5%;
+  bottom: 260px;
+  left: 15%;
   z-index: 3;
   animation-delay: 0.6s;
 }
