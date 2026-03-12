@@ -76,9 +76,9 @@ body {
 }
 
 .circle-wrap {
-  width: 190px;
-  /* 디자이너 시안처럼 크게 만들어 공끼리 확실하게 겹침(Overlap)을 유도합니다 */
-  height: 190px;
+  width: 220px;
+  /* 모바일 화면 좌우를 꽉 채우기 위해 덩치를 아주 크게 키움 */
+  height: 220px;
   position: absolute;
   /* bottom 기준 배치를 위한 absolute 선언 */
   transform-origin: center bottom;
@@ -107,31 +107,32 @@ body {
   위치 및 등장 지연시간 제어 (Bottom 기준 앵커링)
   서로 겹치도록 z-index와 딜레이, bottom/left/right 좌표 설정 
 */
-/* 1. SKT (왼쪽 제일 바닥) */
+/* 1. SKT (왼쪽 제일 바닥, 왼쪽 벽 밖으로 나감) */
 .skt-wrap {
-  bottom: 0px;
-  /* 최하단 바닥에 완벽하게 안착 */
-  left: 0px;
+  bottom: -20px;
+  /* 바닥을 살짝 파고들게 */
+  left: -15px;
+  /* 왼쪽 벽에 바짝 붙음 */
   z-index: 1;
   animation-delay: 0s;
 }
 
-/* 2. KT (오른쪽 중간 - SKT와 LGU+에 겹치도록 배치) */
+/* 2. KT (오른쪽 중간, 오른쪽 벽 밖으로 나감) */
 .kt-wrap {
-  bottom: 110px;
-  /* SKT와 상하로 겹치는 높이 */
-  right: -5px;
-  /* 약간 오른쪽으로 빠져나오게 지그재그 강조 */
+  bottom: 120px;
+  /* SKT 머리 위를 덮음 */
+  right: -25px;
+  /* 오른쪽 벽에 바짝 붙음 */
   z-index: 2;
   animation-delay: 0.3s;
 }
 
-/* 3. LG U+ (왼쪽 최상단 - KT와 SKT 머리 위로 겹침) */
+/* 3. LG U+ (왼쪽 최상단, 왼쪽 벽 밖으로 나감) */
 .lgu-wrap {
-  bottom: 240px;
-  /* KT와 확실히 겹치면서 제일 위쪽에 위치 */
-  left: 10px;
-  /* KT와 반대로 왼쪽으로 지그재그 치우침 */
+  bottom: 270px;
+  /* 제일 높은 곳에서 KT를 덮음 */
+  left: -10px;
+  /* 다시 왼쪽 벽에 붙음 */
   z-index: 3;
   animation-delay: 0.6s;
 }
