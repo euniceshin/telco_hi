@@ -26,16 +26,14 @@ body {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   height: 100dvh;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 30px 24px 10px 24px;
-  overflow-x: hidden;
-  /* 바닥에 더 밀착되도록 bottom-padding 10px로 축소 */
+  overflow: hidden;
+  /* 오버레이를 위해 hidden */
 }
 
 .header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 24px;
 }
 
@@ -44,6 +42,8 @@ body {
   font-weight: 500;
   font-size: 15px;
   letter-spacing: -0.3px;
+  margin-left: auto;
+  /* 우측 상단에 고정 */
 }
 
 .main-content {
@@ -82,12 +82,17 @@ body {
   width: 100%;
   height: 600px;
   pointer-events: none;
-  /* 반응형 화면에서 물리적으로 공이 닿아있도록 계산 (피타고라스 정리 기반) */
+  /*
+    공 3개 지그재그 레이아웃 물리 계산:
+    d = 0.54w (지름)
+    좌/우 위치 3%에서: 센터 x = 0.03w + 0.27w = 0.30w, 0.70w
+    h (수평 센터 간각) = 0.40w
+    맞닿는 dy = sqrt(0.54² - 0.40²) * w = sqrt(0.2916-0.16) * w = 0.363w
+    dy = d * 0.672 으로 표현
+  */
   --w: min(100vw, 430px);
-  --d: calc(var(--w) * 0.58);
-  /* 공 지름: 화면폭의 58% */
-  --dy: calc(var(--w) * 0.44);
-  /* 공들이 서서히 맞닿는 세로 높이 */
+  --d: calc(var(--w) * 0.54);
+  --dy: calc(var(--w) * 0.40); /* dy=sqrt(0.54^2-0.40^2)*w ≈ 0.363w, 살짝 크게해서 안겹치게 */
 }
 
 .circle-wrap {
@@ -123,7 +128,7 @@ body {
   서로 겹치지 않게 정확히 20px 갭을 둔 지그재그 레이아웃
 */
 
-/* 1. SKT (왼쪽 바닥) */
+/* 1. SKT (좌측 바닥) */
 .skt-wrap {
   bottom: 0px;
   left: 3%;
@@ -131,16 +136,15 @@ body {
   animation-delay: 0s;
 }
 
-/* 2. KT (오른쪽 중간 - 물리적 맞닿음 위치) */
+/* 2. KT (오른쪽 중간) */
 .kt-wrap {
   bottom: var(--dy);
   right: 3%;
   z-index: 1;
-  /* SKT와 LGU+ 뒤로 배치하여 공간감 연출 */
   animation-delay: 0.3s;
 }
 
-/* 3. LG U+ (왼쪽 위 - 물리적 맞닿음 위치) */
+/* 3. LG U+ (좌측 위 - KT와 맞닿) */
 .lgu-wrap {
   bottom: calc(var(--dy) * 2);
   left: 3%;
@@ -257,4 +261,394 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ==================================
+   Step 2 Styles
+   ================================== */
+.step-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 0.4s ease-out;
+  position: relative;
+  /* 자식 absolute 위치 기준 제공용 */
+}
+
+/* Step 2 통신사 로고 좌측 상단 고정 */
+.selected-telecom-logo {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.selected-telecom-logo img {
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.main-content-step2 {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  padding-top: 10px;
+}
+
+.text-section-step2 {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeIn 1s ease-out;
+}
+
+.subtitle_step2 {
+  color: #aadb2f;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.title_step2 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -1px;
+}
+
+/* Grade Grid */
+.grade-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.grade-card {
+  background-color: #1F2131;
+  border-radius: 16px;
+  padding: 0 8px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.grade-card img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  margin-top: 0;
+  margin-bottom: 2px;
+  pointer-events: none;
+}
+
+.grade-card span {
+  font-size: 18px;
+  font-weight: 800;
+  color: #E2E3ED;
+  pointer-events: none;
+}
+
+/* Selected State */
+.grade-card.selected {
+  outline: none;
+  background-color: #26293C;
+  z-index: 10;
+}
+
+.grade-card.selected::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 16px;
+  border: 6px solid #aadb2f;
+  pointer-events: none;
+}
+
+/* Bottom Action */
+.bottom-action {
+  margin-top: auto;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.next-btn {
+  width: 100%;
+  height: 56px;
+  background-color: #242636;
+  color: #6C6D7C;
+  border-radius: 14px;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: not-allowed;
+  transition: all 0.2s ease;
+}
+
+.next-btn.active {
+  background-color: #aadb2f;
+  color: #0D0F26;
+  cursor: pointer;
+}
+
+.next-btn.active:active {
+  transform: scale(0.97);
+}
+
+/* ==================================
+   Step 3 Styles (메인 혜택 화면)
+   ================================== */
+.top-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #FFFFFF;
+  padding: 0 24px; /* 수평 패딩 직접 부여 */
+}
+
+.top-info .divider {
+  margin: 0 8px;
+  color: #3f4153;
+  font-size: 14px;
+}
+
+.reset-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 12px;
+  padding: 4px 10px;
+  color: #aadb2f;
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Sticky Category Tabs */
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 24px 16px 24px; /* 좌우 24px 패딩으로 인라인 여백 */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  background-color: #0D0F26;
+}
+
+.category-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.sticky-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: #8C8D9B;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 20px;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab-btn.active {
+  background-color: #aadb2f;
+  color: #0D0F26;
+  font-weight: 700;
+}
+
+/* Benefit List & Card */
+.benefit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 40px;
+  padding-top: 10px;
+}
+
+.benefit-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #242634;
+  border-radius: 16px;
+  padding: 24px 20px;
+  width: 100%;
+}
+
+.benefit-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.benefit-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-name {
+  color: #aadb2f;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.usage-limit {
+  color: #8C8D9B;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.benefit-title {
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.benefit-logo {
+  width: 52px;
+  height: 52px;
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.benefit-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ==================================
+   Step 3 Full Screen Layout
+   ================================== */
+.step3-screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: clip; /* clip x 만 차단, sticky 영향 없음 */
+  padding: 20px 0 0 0; /* 수평 패딩 제거 - 자식에서 직접 처리 */
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Step 3 내 정보바: 패딩 자체 적용 */
+.top-info {
+  padding: 0 24px;
+  margin-bottom: 4px;
+}
+
+/* 혜택 리스트: 패딩 자체 적용 */
+#benefitList {
+  padding: 0 24px;
+}
+
+/* ==================================
+   Bottom Sheet Overlay + Sheet
+   ================================== */
+.selection-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.55);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.selection-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.selection-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* 첫 진입 시: 풀 스크린 */
+  background-color: #0D0F26;
+  border-radius: 0;
+  z-index: 201;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+    border-radius 0.3s ease;
+  padding: 30px 24px 10px 24px;
+  /* 소종 패딩 */
+  overflow: hidden;
+}
+
+/* 재선택 시: 바텀시트 높이 90%, 상단 둥근 */
+.selection-sheet.bottom-sheet-mode {
+  height: 90%;
+  border-radius: 24px 24px 0 0;
+  transform: translateY(100%);
+  /* 초기: 화면 아래 숨김 */
+}
+
+.selection-sheet.bottom-sheet-mode.open {
+  transform: translateY(0);
+}
+
+/* Handle bar (재선택 바텀 시트에서만 표시) */
+.sheet-handle {
+  width: 40px;
+  height: 4px;
+  background-color: #3f4153;
+  border-radius: 4px;
+  margin: 12px auto 0 auto;
+  flex-shrink: 0;
+}
+
+.step-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  overflow: hidden;
+  animation: fadeIn 0.35s ease-out;
 }

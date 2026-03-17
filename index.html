@@ -9,48 +9,112 @@
 </head>
 
 <body>
-    <div class="app-container">
-        <header class="header">
-            <span class="step-indicator">1/2 단계</span>
-        </header>
+    <div class="app-container" id="appContainer">
 
-        <main class="main-content">
-            <div class="text-section">
-                <p class="subtitle">빠르게 시작해볼까요?</p>
-                <h1 class="title">사용 중인 통신사를<br>골라주세요.</h1>
+        <!-- Step 3 : 메인 혜택 화면 (배경에 항상 존재, 처음엔 숨김) -->
+        <div id="step3" class="step3-screen" style="display: none;">
+            <!-- 상단 정보 -->
+            <div class="top-info">
+                <span id="finalTelecom">SKT</span>
+                <span class="divider">|</span>
+                <span id="finalGrade">VIP</span>
+                <button class="reset-btn" id="resetBtn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                    </svg>
+                    재선택
+                </button>
             </div>
 
-            <div class="telecom-buttons">
-                <!-- LG U+ -->
-                <div class="circle-wrap lgu-wrap">
-                    <button class="circle-btn lgu" data-telecom="LGU+">
-                        <div class="logo-container">
-                            <img src="assets/logo-lgu.svg" alt="LG U+">
-                        </div>
-                    </button>
-                </div>
+            <!-- Sticky Category Tabs -->
+            <div class="category-tabs sticky-tabs" id="categoryTabs">
+                <button class="tab-btn active" data-category="all">인기</button>
+                <button class="tab-btn" data-category="food">먹거리</button>
+                <button class="tab-btn" data-category="play">놀거리</button>
+                <button class="tab-btn" data-category="shopping">쇼핑</button>
+                <button class="tab-btn" data-category="life">생활편의</button>
+            </div>
 
-                <!-- SKT -->
-                <div class="circle-wrap skt-wrap">
-                    <button class="circle-btn skt" data-telecom="SKT">
-                        <div class="logo-container">
-                            <img src="assets/logo-skt.svg" alt="SKT">
-                        </div>
-                    </button>
-                </div>
+            <!-- Benefit List Container -->
+            <div class="benefit-list" id="benefitList"></div>
+        </div>
 
-                <!-- KT -->
-                <div class="circle-wrap kt-wrap">
-                    <button class="circle-btn kt" data-telecom="KT">
-                        <div class="logo-container">
-                            <img src="assets/logo-kt.svg" alt="KT">
+        <!-- Bottom Sheet Overlay -->
+        <div id="selectionOverlay" class="selection-overlay active"></div>
+
+        <!-- Bottom Sheet (Step 1 + Step 2 container) -->
+        <div id="selectionSheet" class="selection-sheet">
+            <!-- Handle bar -->
+            <div class="sheet-handle" id="sheetHandle" style="display:none;"></div>
+
+            <!-- Step 1 : 통신사 선택 -->
+            <div id="step1" class="step-section">
+                <header class="header">
+                    <span class="step-indicator">1/2단계</span>
+                </header>
+
+                <main class="main-content">
+                    <div class="text-section">
+                        <h1 class="title">사용 중인 통신사를<br>골라주세요.</h1>
+                    </div>
+
+                    <div class="telecom-buttons">
+                        <!-- LG U+ -->
+                        <div class="circle-wrap lgu-wrap">
+                            <button class="circle-btn lgu" data-telecom="LGU+">
+                                <div class="logo-container">
+                                    <img src="assets/logo-lgu.svg" alt="LG U+">
+                                </div>
+                            </button>
                         </div>
-                    </button>
+
+                        <!-- SKT -->
+                        <div class="circle-wrap skt-wrap">
+                            <button class="circle-btn skt" data-telecom="SKT">
+                                <div class="logo-container">
+                                    <img src="assets/logo-skt.svg" alt="SKT">
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- KT -->
+                        <div class="circle-wrap kt-wrap">
+                            <button class="circle-btn kt" data-telecom="KT">
+                                <div class="logo-container">
+                                    <img src="assets/logo-kt.svg" alt="KT">
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <!-- Step 2 : 등급 선택 -->
+            <div id="step2" class="step-section" style="display: none;">
+                <header class="header">
+                    <div class="selected-telecom-logo" id="selectedLogo">
+                        <img src="" alt="Selected Telecom Logo">
+                    </div>
+                    <span class="step-indicator">2/2단계</span>
+                </header>
+
+                <main class="main-content-step2">
+                    <div class="text-section-step2">
+                        <h1 class="title_step2">내 등급을<br>선택하면 완료!</h1>
+                    </div>
+
+                    <div class="grade-grid" id="gradeGrid"></div>
+                </main>
+
+                <div class="bottom-action">
+                    <button id="nextBtn" class="next-btn" disabled>완료</button>
                 </div>
             </div>
-        </main>
+        </div>
+
     </div>
-
     <script src="script.js"></script>
 </body>
 
